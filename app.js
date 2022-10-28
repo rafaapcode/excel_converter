@@ -1,14 +1,15 @@
-const Reader = require('./Reader');
-const Processor = require('./Processor');
-const Table = require('./Table');
-const HtmlParser = require('./HtmlParser');
-const CreateHtml = require('./CreateHtml');
+const Reader = require('./src/Reader');
+const Processor = require('./src/Processor');
+const Table = require('./src/Table');
+const HtmlParser = require('./src/HtmlParser');
+const Writer = require('./src/Writer');
+const process = require('process');
 
 const reader = new Reader();
 
 
 async function readingCsv() {
-    const data = await reader.read('./teste.csv');
+    const data = await reader.read(`./fileToConvert/${process.argv[2]}.csv`);
 
     const dataProcessed = Processor.process(data);
 
@@ -16,8 +17,10 @@ async function readingCsv() {
 
     const html = await HtmlParser.parse(table);
 
-    const createHtml = new CreateHtml(html);
-    createHtml.createHtml('./excel.html');
+    const writer = new Writer(html);
+    await writer.writer(`./fileConverted/${Date.now()}.html`);
+
+    writer.writerPdf(`./fileConverted/${Date.now()}.pdf`);
 }
 
 readingCsv();
