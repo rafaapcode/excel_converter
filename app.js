@@ -7,9 +7,10 @@ const process = require('process');
 
 const reader = new Reader();
 
+const [, , arguments] = process.argv;
 
 async function readingCsv() {
-    const data = await reader.read(`./fileToConvert/${process.argv[2]}.csv`);
+    const data = await reader.read(`./fileToConvert/${arguments}.csv`);
 
     const dataProcessed = Processor.process(data);
 
